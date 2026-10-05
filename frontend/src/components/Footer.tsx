@@ -17,11 +17,11 @@ export function Footer() {
       }}
     >
       <span>{t('footer.unofficial')}</span>
-      <span style={{ display: 'flex', gap: space.md }}>
-        <a href={FEEDBACK_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted }}>
+      <span style={{ display: 'flex', flexWrap: 'wrap', gap: `${space.xs}px ${space.md}px` }}>
+        <a href={FEEDBACK_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted, whiteSpace: 'nowrap' }}>
           {t('feedback.open')}
         </a>
-        <a href={REPO_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted }}>
+        <a href={REPO_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted, whiteSpace: 'nowrap' }}>
           {t('footer.source')}
         </a>
       </span>
