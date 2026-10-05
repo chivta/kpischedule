@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Set once here so the component files stay free of a hardcoded namespace.
+namespace: kpischedule
+
+resources:
+- namespace.yaml
+- frontend/deployment.yaml
+- frontend/service.yaml
+- ingress.yaml

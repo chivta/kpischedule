@@ -1,0 +1,18 @@
+# No tls: block: the letsencrypt resolver already holds a wildcard for *.chivtar.dev.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kpischedule
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: kpischedule.chivtar.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
