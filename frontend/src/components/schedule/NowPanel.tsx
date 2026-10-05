@@ -241,10 +241,11 @@ export function NowPanel({ lessons, slots, anchor, kind, onSelect }: NowPanelPro
           <span style={{ fontFamily: font.mono, color: color.textMuted }}>{formatMinutes(clock.minutes)}</span>
           <span>{t('schedule.kyivTime')}</span>
           {laterToday > 0 && (
-            <>
-              <span aria-hidden>·</span>
-              <span>{tn('now.remaining', laterToday)}</span>
-            </>
+            // On phones the count takes its own line, so no separator dangles where it wraps.
+            <span style={{ flexBasis: compact ? '100%' : undefined }}>
+              {!compact && <span aria-hidden>· </span>}
+              {tn('now.remaining', laterToday)}
+            </span>
           )}
         </div>
       </div>
