@@ -7,6 +7,7 @@ const uk = {
   'app.home': 'На головну',
   'footer.unofficial': 'Неофіційний сайт. Дані надає api.campus.kpi.ua',
   'footer.source': 'Код на GitHub',
+  'feedback.open': 'Написати відгук у Telegram',
 
   'home.title': 'Розклад КПІ',
   'home.subtitle': 'Знайдіть групу або викладача й одразу побачите, яка пара зараз і що далі.',
@@ -135,6 +136,7 @@ const en: Record<TranslationKey, string> = {
   'app.home': 'Home',
   'footer.unofficial': 'Unofficial site. Data comes from api.campus.kpi.ua',
   'footer.source': 'Source on GitHub',
+  'feedback.open': 'Send feedback on Telegram',
 
   'home.title': 'KPI Schedule',
   'home.subtitle': 'Find a group or a lecturer and see which class is on now and what comes next.',

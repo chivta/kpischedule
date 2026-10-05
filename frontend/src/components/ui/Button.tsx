@@ -1,5 +1,5 @@
 import { motion, type HTMLMotionProps } from 'motion/react'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { useHover } from '../../hooks/useHover'
 import { color, duration, font, fontSize, radius, space } from '../../theme'
 
@@ -64,6 +64,22 @@ interface IconButtonProps extends HTMLMotionProps<'button'> {
   children: ReactNode
 }
 
+function iconControlStyle(highlighted: boolean, active: boolean): CSSProperties {
+  return {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    width: CONTROL_HEIGHT,
+    height: CONTROL_HEIGHT,
+    borderRadius: radius.pill,
+    border: `1px solid ${active ? color.borderStrong : color.border}`,
+    background: highlighted ? color.surfaceHover : color.surface,
+    color: color.text,
+    transition: `background ${duration.fast}s ease, border-color ${duration.fast}s ease`,
+  }
+}
+
 // Round icon-only button.
 export function IconButton({ label, active = false, style, children, ...rest }: IconButtonProps) {
   const { hovered, hoverProps } = useHover()
@@ -74,23 +90,37 @@ export function IconButton({ label, active = false, style, children, ...rest }: 
       title={label}
       whileTap={{ scale: TAP_SCALE }}
       {...hoverProps}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        width: CONTROL_HEIGHT,
-        height: CONTROL_HEIGHT,
-        borderRadius: radius.pill,
-        border: `1px solid ${active ? color.borderStrong : color.border}`,
-        background: hovered || active ? color.surfaceHover : color.surface,
-        color: color.text,
-        transition: `background ${duration.fast}s ease, border-color ${duration.fast}s ease`,
-        ...style,
-      }}
+      style={{ ...iconControlStyle(hovered || active, active), ...style }}
       {...rest}
     >
       {children}
     </motion.button>
+  )
+}
+
+interface IconLinkProps extends HTMLMotionProps<'a'> {
+  // Read by screen readers and shown as the tooltip.
+  label: string
+  href: string
+  children: ReactNode
+}
+
+// Round icon-only link to an external page, opened in a new tab. Looks like IconButton.
+export function IconLink({ label, href, style, children, ...rest }: IconLinkProps) {
+  const { hovered, hoverProps } = useHover()
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={label}
+      title={label}
+      whileTap={{ scale: TAP_SCALE }}
+      {...hoverProps}
+      style={{ ...iconControlStyle(hovered, false), ...style }}
+      {...rest}
+    >
+      {children}
+    </motion.a>
   )
 }

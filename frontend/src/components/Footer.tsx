@@ -1,5 +1,5 @@
 import { useT } from '../i18n/useT'
-import { REPO_URL } from '../lib/routes'
+import { FEEDBACK_URL, REPO_URL } from '../lib/routes'
 import { color, fontSize, space } from '../theme'
 
 export function Footer() {
@@ -17,9 +17,14 @@ export function Footer() {
       }}
     >
       <span>{t('footer.unofficial')}</span>
-      <a href={REPO_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted }}>
-        {t('footer.source')}
-      </a>
+      <span style={{ display: 'flex', gap: space.md }}>
+        <a href={FEEDBACK_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted }}>
+          {t('feedback.open')}
+        </a>
+        <a href={REPO_URL} target="_blank" rel="noreferrer" style={{ color: color.textMuted }}>
+          {t('footer.source')}
+        </a>
+      </span>
     </footer>
   )
 }

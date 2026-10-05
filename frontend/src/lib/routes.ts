@@ -5,6 +5,8 @@ export const HOME_PATH = '/'
 export const GROUP_ROUTE = '/group/:id'
 export const LECTURER_ROUTE = '/lecturer/:id'
 export const REPO_URL = 'https://github.com/chivta/kpischedule'
+// Feedback goes to the @ukbotsup Telegram account.
+export const FEEDBACK_URL = 'https://t.me/ukbotsup'
 
 export function schedulePath(ref: { kind: OwnerKind; id: string }): string {
   return `/${ref.kind}/${encodeURIComponent(ref.id)}`
