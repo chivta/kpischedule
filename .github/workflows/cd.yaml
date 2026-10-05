@@ -1,0 +1,68 @@
+name: CD
+
+# Runs only after CI passes on main. Builds the production image, pushes it to ghcr.io
+# tagged with the full commit SHA, then pins that tag in k8s/frontend/deployment.yaml.
+# Flux reconciles the manifest from this repo, nothing is applied imperatively.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: chivta/kpischedule/frontend
+  SHA: ${{ github.event.workflow_run.head_sha }}
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      # main, not the detached SHA, so the deploy commit has a branch to land on.
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+
+      # A queued run whose commit has been superseded would pin an older image over a newer one.
+      - name: Abort if main has moved on
+        run: test "$(git rev-parse HEAD)" = "$SHA"
+
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push frontend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          target: production
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.SHA }}
+          labels: |
+            org.opencontainers.image.revision=${{ env.SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Pin the built image
+        run: sed -i -E "s|image: ${REGISTRY}/${IMAGE_NAME}:.*|image: ${REGISTRY}/${IMAGE_NAME}:${SHA}|" k8s/frontend/deployment.yaml
+
+      - name: Commit the manifest
+        run: |
+          git diff --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "deploy: frontend ${SHA}"
+          git push origin HEAD:main
