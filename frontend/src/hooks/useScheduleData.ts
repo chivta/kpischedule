@@ -125,12 +125,20 @@ export function useScheduleData(kind: OwnerKind, id: string): ScheduleData {
   }
 }
 
-// Exams of a group, soonest first. Pass a null id to skip loading.
-export function useExams(groupId: string | null): ApiExam[] {
-  const { data } = useCachedQuery(
+export interface ExamsData {
+  // Soonest first.
+  exams: ApiExam[]
+  // True until the first copy, cached or fresh, is available.
+  loading: boolean
+}
+
+// Exams of a group. Pass a null id to skip loading.
+export function useExams(groupId: string | null): ExamsData {
+  const { data, loading } = useCachedQuery(
     groupId === null ? null : `exams:${groupId}`,
     () => api.exams(groupId ?? ''),
     EXAMS_MAX_AGE_MS,
   )
-  return useMemo(() => [...(data ?? [])].sort((a, b) => a.date.localeCompare(b.date)), [data])
+  const exams = useMemo(() => [...(data ?? [])].sort((a, b) => a.date.localeCompare(b.date)), [data])
+  return { exams, loading: data === undefined && loading }
 }
