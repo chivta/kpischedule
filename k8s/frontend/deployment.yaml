@@ -17,7 +17,10 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        # uid and gid of the nginx user in nginx-unprivileged.
         runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
         seccompProfile:
           type: RuntimeDefault
       containers:
