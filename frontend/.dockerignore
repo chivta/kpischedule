@@ -3,3 +3,4 @@ dist
 .git
 test-results
 playwright-report
+public/egg

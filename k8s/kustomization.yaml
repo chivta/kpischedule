@@ -6,6 +6,7 @@ namespace: kpischedule
 
 resources:
 - namespace.yaml
+- secrets.enc.yaml
 - frontend/deployment.yaml
 - frontend/service.yaml
 - ingress.yaml

@@ -39,6 +39,10 @@ spec:
             # nginx keeps its pid file and temp paths here, the root filesystem is read-only.
             - name: tmp
               mountPath: /tmp
+            # The Konami code photo, kept out of git and the image. nginx serves it at /egg/.
+            - name: easter-egg
+              mountPath: /usr/share/nginx/egg
+              readOnly: true
           livenessProbe:
             httpGet:
               path: /health
@@ -59,3 +63,6 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+        - name: easter-egg
+          secret:
+            secretName: easter-egg

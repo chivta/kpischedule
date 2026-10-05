@@ -3,3 +3,5 @@ dist
 .env
 test-results
 playwright-report
+k8s/secrets.yaml
+frontend/public/egg/
