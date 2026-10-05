@@ -34,7 +34,7 @@ export function TopBar() {
         zIndex: zIndex.topBar,
         display: 'flex',
         alignItems: 'center',
-        gap: space.sm,
+        gap: compact ? space.xs : space.sm,
         marginTop: space.sm,
         padding: space.xs,
         paddingLeft: space.md,

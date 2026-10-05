@@ -70,12 +70,18 @@ test('the footer feedback link opens the Telegram account in a new tab', async (
   await expect(link).toHaveAttribute('target', '_blank')
 })
 
-test('the top bar fits narrow phones without horizontal overflow', async ({ page }) => {
+test('the top bar fits narrow phones without horizontal overflow', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'desktop', 'Phones use overlay scrollbars, desktop reserves a gutter')
   await page.setViewportSize(NARROW_PHONE)
   for (const path of [PATHS.home, PATHS.group]) {
     await page.goto(path)
-    const bar = await page.getByRole('banner').boundingBox()
+    const banner = page.getByRole('banner')
+    const bar = await banner.boundingBox()
     expect(bar && bar.x + bar.width).toBeLessThanOrEqual(NARROW_PHONE.width)
+    for (const button of await banner.getByRole('button').all()) {
+      const box = await button.boundingBox()
+      expect(box && bar && box.x + box.width).toBeLessThanOrEqual(bar!.x + bar!.width)
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(NARROW_PHONE.width)
   }
 })
