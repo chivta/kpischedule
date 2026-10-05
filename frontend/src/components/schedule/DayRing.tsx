@@ -177,7 +177,7 @@ export function DayRing({ slots, today, clock, current, next, size }: DayRingPro
             style={{
               marginTop: 4,
               fontSize: fontSize.xs,
-              color: color.textFaint,
+              color: color.textMuted,
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
               fontWeight: 600,

@@ -79,6 +79,8 @@ export function NowPanel({ lessons, slots, anchor, kind, onSelect }: NowPanelPro
   const compact = useIsCompact()
   const clock = useKyivClock()
   const { current, next, remainingToday } = computeNow(lessons, clock, anchor, slots)
+  // The running pair is already on screen, so the count names only the ones after it.
+  const laterToday = remainingToday - (current ? 1 : 0)
   const today = lessonsOn(lessons, clock.date, anchor)
   const endedToday = today.some((lesson) => {
     const slot = slots.find((item) => item.time === lesson.time)
@@ -238,10 +240,10 @@ export function NowPanel({ lessons, slots, anchor, kind, onSelect }: NowPanelPro
         >
           <span style={{ fontFamily: font.mono, color: color.textMuted }}>{formatMinutes(clock.minutes)}</span>
           <span>{t('schedule.kyivTime')}</span>
-          {remainingToday > 0 && (
+          {laterToday > 0 && (
             <>
               <span aria-hidden>·</span>
-              <span>{tn('now.remaining', remainingToday)}</span>
+              <span>{tn('now.remaining', laterToday)}</span>
             </>
           )}
         </div>
