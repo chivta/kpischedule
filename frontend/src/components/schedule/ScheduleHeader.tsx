@@ -1,6 +1,7 @@
 import { ArrowUpRight, Check, Share2, Star } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import type { ApiLecturerProfile, OwnerKind } from '../../api/types'
+import { useIsCompact } from '../../hooks/useMediaQuery'
 import { useT } from '../../i18n/useT'
 import { isSaved, savedStore, toggleSaved, useStore, type ScheduleRef } from '../../lib/storage'
 import { color, font, fontSize, space } from '../../theme'
@@ -15,6 +16,11 @@ const NAME_SKELETON_WIDTH = 320
 const NAME_SKELETON_HEIGHT = 48
 const LABEL_SEPARATOR = ' · '
 const BLOCK_BASIS = 360
+// Lecturer names run three words long, group codes are a few characters.
+const NAME_SIZE: Record<OwnerKind, string> = {
+  group: 'clamp(34px, 6vw, 68px)',
+  lecturer: 'clamp(24px, 4.5vw, 52px)',
+}
 
 interface ScheduleHeaderProps {
   kind: OwnerKind
@@ -44,6 +50,7 @@ export function ScheduleHeader({ kind, owner, profile }: ScheduleHeaderProps) {
   const saved = useStore(savedStore)
   const [copied, setCopied] = useState(false)
   const [photoFailed, setPhotoFailed] = useState(false)
+  const compact = useIsCompact()
   const timer = useRef<number>(0)
   useEffect(() => () => window.clearTimeout(timer.current), [])
 
@@ -69,7 +76,16 @@ export function ScheduleHeader({ kind, owner, profile }: ScheduleHeaderProps) {
 
   return (
     <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: space.md }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: space.md, flex: `1 1 ${BLOCK_BASIS}px`, minWidth: 0 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: compact ? 'column' : 'row',
+          alignItems: compact ? 'flex-start' : 'center',
+          gap: space.md,
+          flex: `1 1 ${BLOCK_BASIS}px`,
+          minWidth: 0,
+        }}
+      >
         {kind === 'lecturer' && profile && !photoFailed && (
           <img
             src={profile.photo}
@@ -96,11 +112,11 @@ export function ScheduleHeader({ kind, owner, profile }: ScheduleHeaderProps) {
               data-testid="owner-name"
               style={{
                 fontFamily: font.display,
-                fontSize: 'clamp(34px, 6vw, 68px)',
+                fontSize: NAME_SIZE[kind],
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
                 lineHeight: 1.05,
-                overflowWrap: 'anywhere',
+                overflowWrap: 'break-word',
               }}
             >
               {owner.name}
