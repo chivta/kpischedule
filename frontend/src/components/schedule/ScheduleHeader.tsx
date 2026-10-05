@@ -23,6 +23,21 @@ interface ScheduleHeaderProps {
   profile: ApiLecturerProfile | null
 }
 
+// Copies through a hidden textarea when the async clipboard API is denied, as in some in-app
+// browsers or when the page has lost focus. Returns false when that fails too.
+function copyWithSelection(text: string): boolean {
+  const area = document.createElement('textarea')
+  area.value = text
+  area.setAttribute('readonly', '')
+  area.style.position = 'fixed'
+  area.style.opacity = '0'
+  document.body.appendChild(area)
+  area.select()
+  const copied = document.execCommand('copy')
+  area.remove()
+  return copied
+}
+
 // Owner name, kind label, lecturer photo and the save and share buttons.
 export function ScheduleHeader({ kind, owner, profile }: ScheduleHeaderProps) {
   const { t } = useT()
@@ -36,10 +51,11 @@ export function ScheduleHeader({ kind, owner, profile }: ScheduleHeaderProps) {
   const saveLabel = starred ? t('schedule.unsave') : t('schedule.save')
 
   const copy = async () => {
+    const url = window.location.href
     try {
-      await navigator.clipboard.writeText(window.location.href)
+      await navigator.clipboard.writeText(url)
     } catch {
-      return
+      if (!copyWithSelection(url)) return
     }
     setCopied(true)
     window.clearTimeout(timer.current)
