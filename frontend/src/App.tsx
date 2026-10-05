@@ -1,7 +1,7 @@
 import { Suspense, lazy, useCallback, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Footer } from './components/Footer'
-import { Jumpscare } from './components/Jumpscare'
+import { KillerFeature } from './components/KillerFeature'
 import { SearchPalette } from './components/SearchPalette'
 import { TopBar } from './components/TopBar'
 import { useKonami } from './hooks/useKonami'
@@ -17,9 +17,9 @@ const Background3D = lazy(() => import('./components/background/Background3D'))
 
 export function App() {
   useApplyTheme()
-  const [scared, setScared] = useState(false)
-  useKonami(useCallback(() => setScared(true), []))
-  const unscare = useCallback(() => setScared(false), [])
+  const [killerFeatureOn, setKillerFeatureOn] = useState(false)
+  useKonami(useCallback(() => setKillerFeatureOn(true), []))
+  const hideKillerFeature = useCallback(() => setKillerFeatureOn(false), [])
   return (
     <BrowserRouter>
       <Suspense fallback={null}>
@@ -49,7 +49,7 @@ export function App() {
         <Footer />
       </div>
       <SearchPalette />
-      {scared && <Jumpscare onDone={unscare} />}
+      {killerFeatureOn && <KillerFeature onDone={hideKillerFeature} />}
     </BrowserRouter>
   )
 }

@@ -4,8 +4,8 @@ import { FEEDBACK_URL, PATHS } from './constants'
 import { expect, test } from './fixtures/test'
 
 const uk = translations.uk
-const OVERLAY = '[data-testid="jumpscare"]'
-const IMAGE_ROUTE = '**/egg/jumpscare.png'
+const OVERLAY = '[data-testid="killer-feature"]'
+const IMAGE_ROUTE = '**/egg/killer-feature.png'
 // A 1x1 PNG, so the suite never needs the real photo, which lives only in the cluster Secret.
 const TINY_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',

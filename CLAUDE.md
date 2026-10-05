@@ -34,7 +34,7 @@ All times are Kyiv wall-clock. Dates are `YYYY-MM-DD` strings and date arithmeti
 ## The `/egg/` Secret
 
 - The keyboard overlay image lives only in `k8s/secrets.enc.yaml`, a Secret encrypted with SOPS to the shared app age key in `.sops.yaml`. Flux decrypts it in the cluster, the pod mounts it at `/usr/share/nginx/egg`, and nginx serves it under `/egg/`.
-- The plaintext `k8s/secrets.yaml` and the local dev copy `frontend/public/egg/jumpscare.png` are gitignored. Never commit either. This machine cannot decrypt `secrets.enc.yaml`.
+- The plaintext `k8s/secrets.yaml` and the local dev copy `frontend/public/egg/killer-feature.png` are gitignored. Never commit either. This machine cannot decrypt `secrets.enc.yaml`.
 - After editing `k8s/secrets.yaml`, run `sops -e k8s/secrets.yaml > k8s/secrets.enc.yaml`.
 - e2e tests serve a 1x1 PNG for that path, so the suite never needs the real image.
 - Commit messages stay neutral about this feature and never name what it does.

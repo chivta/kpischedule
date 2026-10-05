@@ -4,8 +4,8 @@ import { usePrefersReducedMotion } from '../hooks/useMediaQuery'
 import { zIndex } from '../theme'
 
 // Served by nginx from the easter-egg Secret, see k8s/frontend/deployment.yaml. Locally it comes
-// from the gitignored public/egg/ folder. When the file is missing the jumpscare does not show.
-const IMAGE_URL = '/egg/jumpscare.png'
+// from the gitignored public/egg/ folder. When the file is missing nothing shows.
+const IMAGE_URL = '/egg/killer-feature.png'
 const SHOW_MS = 1800
 const BACKDROP = '#000'
 const FLASH = '#ff1a1a'
@@ -18,21 +18,21 @@ const ZOOM_PEAK = 1.3
 const FLASH_OPACITY = [0.7, 0, 0.45, 0, 0.25, 0]
 const FLASH_SECONDS = 0.6
 
-const SCREAM_SECONDS = 1.4
-const SCREAM_VOLUME = 0.32
-const SCREAM_ATTACK_SECONDS = 0.03
-const SCREAM_START_HZ = 950
-const SCREAM_END_HZ = 90
+const STING_SECONDS = 1.4
+const STING_VOLUME = 0.32
+const STING_ATTACK_SECONDS = 0.03
+const STING_START_HZ = 950
+const STING_END_HZ = 90
 const SILENT_GAIN = 0.0001
 
 // Plays a harsh falling screech made of noise and a sawtooth. Returns a function that frees the audio.
-function scream(): () => void {
+function playSting(): () => void {
   try {
     const context = new AudioContext()
     const now = context.currentTime
-    const end = now + SCREAM_SECONDS
+    const end = now + STING_SECONDS
 
-    const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * SCREAM_SECONDS), context.sampleRate)
+    const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * STING_SECONDS), context.sampleRate)
     const samples = buffer.getChannelData(0)
     for (let index = 0; index < samples.length; index++) samples[index] = Math.random() * 2 - 1
     const noise = context.createBufferSource()
@@ -40,12 +40,12 @@ function scream(): () => void {
 
     const screech = context.createOscillator()
     screech.type = 'sawtooth'
-    screech.frequency.setValueAtTime(SCREAM_START_HZ, now)
-    screech.frequency.exponentialRampToValueAtTime(SCREAM_END_HZ, end)
+    screech.frequency.setValueAtTime(STING_START_HZ, now)
+    screech.frequency.exponentialRampToValueAtTime(STING_END_HZ, end)
 
     const gain = context.createGain()
     gain.gain.setValueAtTime(SILENT_GAIN, now)
-    gain.gain.exponentialRampToValueAtTime(SCREAM_VOLUME, now + SCREAM_ATTACK_SECONDS)
+    gain.gain.exponentialRampToValueAtTime(STING_VOLUME, now + STING_ATTACK_SECONDS)
     gain.gain.exponentialRampToValueAtTime(SILENT_GAIN, end)
 
     noise.connect(gain)
@@ -61,8 +61,8 @@ function scream(): () => void {
   }
 }
 
-// Full-screen Konami code jumpscare. Closes itself after a moment, or on any click or key.
-export function Jumpscare({ onDone }: { onDone: () => void }) {
+// Full-screen photo with a sound, shown on the Konami code. Closes itself after a moment, or on any click or key.
+export function KillerFeature({ onDone }: { onDone: () => void }) {
   const reducedMotion = usePrefersReducedMotion()
   const [loaded, setLoaded] = useState(false)
 
@@ -79,11 +79,11 @@ export function Jumpscare({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     if (!loaded) return
-    const stopScream = scream()
+    const stopSting = playSting()
     const timer = window.setTimeout(onDone, SHOW_MS)
     window.addEventListener('keydown', onDone)
     return () => {
-      stopScream()
+      stopSting()
       window.clearTimeout(timer)
       window.removeEventListener('keydown', onDone)
     }
@@ -93,13 +93,13 @@ export function Jumpscare({ onDone }: { onDone: () => void }) {
 
   return (
     <div
-      data-testid="jumpscare"
+      data-testid="killer-feature"
       aria-hidden
       onClick={onDone}
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: zIndex.jumpscare,
+        zIndex: zIndex.killerFeature,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

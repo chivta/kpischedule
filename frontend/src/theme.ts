@@ -73,7 +73,7 @@ export const zIndex = {
   topBar: 20,
   overlay: 40,
   dialog: 50,
-  jumpscare: 100,
+  killerFeature: 100,
 } as const
 
 // Viewport widths in px. Below `compact` the week shows one day at a time.
