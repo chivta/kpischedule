@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import type { ApiExam } from '../../api/types'
 import { MINUTE_MS } from '../../hooks/useCachedQuery'
 import { useKyivClock } from '../../hooks/useKyivClock'
+import { useIsCompact } from '../../hooks/useMediaQuery'
 import { useExams } from '../../hooks/useScheduleData'
 import { useT } from '../../i18n/useT'
 import { schedulePath } from '../../lib/routes'
@@ -23,10 +24,14 @@ const META_ICON_SIZE = 13
 const PASSED_OPACITY = 0.5
 const SKELETON_HEIGHT = 92
 const SKELETON_COUNT = 2
+// Lines the icon up with the first line of text next to it.
+const ICON_BASELINE_SHIFT = '-2px'
 
-// One exam row: date block, subject with lecturer and room, countdown chip.
+// One exam row: date block, subject with lecturer and room, countdown chip. On phones the chip
+// moves under the subject so the text column keeps its width.
 function ExamCard({ exam, today }: { exam: ApiExam; today: IsoDate }) {
   const { t, tn, weekday, dayMonth } = useT()
+  const compact = useIsCompact()
   const date = exam.date.slice(0, DATE_LENGTH)
   const time = exam.date.slice(TIME_START, TIME_END)
   const daysLeft = daysBetween(today, date)
@@ -45,8 +50,8 @@ function ExamCard({ exam, today }: { exam: ApiExam; today: IsoDate }) {
       data-testid="exam-card"
       style={{
         display: 'flex',
-        alignItems: 'center',
-        gap: space.md,
+        alignItems: compact ? 'flex-start' : 'center',
+        gap: compact ? space.sm : space.md,
         padding: space.md,
         opacity: daysLeft < 0 ? PASSED_OPACITY : 1,
       }}
@@ -75,8 +80,8 @@ function ExamCard({ exam, today }: { exam: ApiExam; today: IsoDate }) {
           }}
         >
           {exam.lecturerName && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: space.xxs }}>
-              <User size={META_ICON_SIZE} aria-hidden />
+            <span>
+              <User size={META_ICON_SIZE} aria-hidden style={{ verticalAlign: ICON_BASELINE_SHIFT, marginRight: space.xxs }} />
               {exam.lecturerId ? (
                 <Link
                   to={schedulePath({ kind: 'lecturer', id: exam.lecturerId })}
@@ -90,14 +95,15 @@ function ExamCard({ exam, today }: { exam: ApiExam; today: IsoDate }) {
             </span>
           )}
           {exam.room && (
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: space.xxs }}>
-              <MapPin size={META_ICON_SIZE} aria-hidden />
+            <span>
+              <MapPin size={META_ICON_SIZE} aria-hidden style={{ verticalAlign: ICON_BASELINE_SHIFT, marginRight: space.xxs }} />
               {exam.room}
             </span>
           )}
         </div>
+        {compact && <div style={{ marginTop: space.xxs }}>{countdown}</div>}
       </div>
-      <div style={{ flexShrink: 0 }}>{countdown}</div>
+      {!compact && <div style={{ flexShrink: 0 }}>{countdown}</div>}
     </Glass>
   )
 }
