@@ -11,7 +11,7 @@ const uk = {
   'home.title': 'Розклад КПІ',
   'home.subtitle': 'Знайдіть групу або викладача й одразу побачите, яка пара зараз і що далі.',
   'home.saved': 'Збережені',
-  'home.savedEmpty': 'Натисніть зірочку на сторінці розкладу, і він з\'явиться тут.',
+  'home.savedEmpty': 'Натисніть зірочку на сторінці розкладу. Перший збережений відкриватиметься одразу під час входу на сайт.',
   'home.lastViewed': 'Останній розклад',
 
   'search.open': 'Пошук',
@@ -52,6 +52,13 @@ const uk = {
   'schedule.offline': 'Немає зв\'язку. Показано збережену копію.',
   'schedule.lecturerProfile': 'Профіль викладача',
   'schedule.kyivTime': 'Час київський',
+  'schedule.more': 'ще {n}',
+  'schedule.less': 'згорнути',
+  'schedule.restoreHidden': 'Повернути',
+  'schedule.hidden_one': 'Приховано {n} предмет',
+  'schedule.hidden_few': 'Приховано {n} предмети',
+  'schedule.hidden_many': 'Приховано {n} предметів',
+  'schedule.hidden_other': 'Приховано {n} предмета',
 
   'tag.lec': 'Лекція',
   'tag.prac': 'Практика',
@@ -73,6 +80,8 @@ const uk = {
   'lesson.held': '{done} з {total} проведено',
   'lesson.fortnightly': 'Раз на два тижні, тиждень {n}',
   'lesson.close': 'Закрити',
+  'lesson.hide': 'Приховати предмет',
+  'lesson.hideHint': 'Усі пари цього предмета зникнуть із розкладу на цьому пристрої. Повернути їх можна кнопкою над тижнем.',
 
   'now.current': 'Зараз',
   'now.next': 'Далі',
@@ -130,7 +139,7 @@ const en: Record<TranslationKey, string> = {
   'home.title': 'KPI Schedule',
   'home.subtitle': 'Find a group or a lecturer and see which class is on now and what comes next.',
   'home.saved': 'Saved',
-  'home.savedEmpty': 'Star a schedule on its page and it shows up here.',
+  'home.savedEmpty': 'Star a schedule on its page. The first saved one opens right away when you enter the site.',
   'home.lastViewed': 'Last viewed',
 
   'search.open': 'Search',
@@ -171,6 +180,13 @@ const en: Record<TranslationKey, string> = {
   'schedule.offline': 'No connection. Showing the saved copy.',
   'schedule.lecturerProfile': 'Lecturer profile',
   'schedule.kyivTime': 'Kyiv time',
+  'schedule.more': '{n} more',
+  'schedule.less': 'collapse',
+  'schedule.restoreHidden': 'Restore',
+  'schedule.hidden_one': '{n} subject hidden',
+  'schedule.hidden_few': '{n} subjects hidden',
+  'schedule.hidden_many': '{n} subjects hidden',
+  'schedule.hidden_other': '{n} subjects hidden',
 
   'tag.lec': 'Lecture',
   'tag.prac': 'Practice',
@@ -192,6 +208,8 @@ const en: Record<TranslationKey, string> = {
   'lesson.held': '{done} of {total} held',
   'lesson.fortnightly': 'Every other week, week {n}',
   'lesson.close': 'Close',
+  'lesson.hide': 'Hide this subject',
+  'lesson.hideHint': 'Every class of this subject disappears from the schedule on this device. The button above the week brings them back.',
 
   'now.current': 'Now',
   'now.next': 'Next',

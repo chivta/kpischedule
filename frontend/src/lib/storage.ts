@@ -83,6 +83,25 @@ export const weekAnchorStore = createStore<WeekAnchor | null>('week-anchor', nul
 // When on, the week shows every pair of the timetable, including ones not held that week.
 export const showAllStore = createStore<boolean>('show-all', false)
 
+// Subjects the user removed from a schedule, e.g. electives they do not take.
+// Keyed by scheduleKey(), each value lists subject names.
+export const hiddenSubjectsStore = createStore<Record<string, string[]>>('hidden-subjects', {})
+
+export function scheduleKey(ref: Pick<ScheduleRef, 'kind' | 'id'>): string {
+  return `${ref.kind}:${ref.id}`
+}
+
+export function hideSubject(key: string, subject: string): void {
+  const hidden = hiddenSubjectsStore.get()
+  if (hidden[key]?.includes(subject)) return
+  hiddenSubjectsStore.set({ ...hidden, [key]: [...(hidden[key] ?? []), subject] })
+}
+
+export function restoreSubjects(key: string): void {
+  const { [key]: _restored, ...rest } = hiddenSubjectsStore.get()
+  hiddenSubjectsStore.set(rest)
+}
+
 export function isSaved(saved: ScheduleRef[], ref: Pick<ScheduleRef, 'kind' | 'id'>): boolean {
   return saved.some((item) => item.kind === ref.kind && item.id === ref.id)
 }
