@@ -1,0 +1,19 @@
+[
+  {
+    "daysLeft": 69,
+    "id": "c2d1aeff-731e-f679-6842-8fb6ca6b3ebd",
+    "date": "2026-12-14T10:25:00",
+    "lecturerName": "Волянюк Наталія Юріївна",
+    "lecturerId": "8def3488486c17dfbc2861301b63237c3c3a05b4c23afed03d59829fba57e10c",
+    "lecturer": {
+      "id": "8def3488486c17dfbc2861301b63237c3c3a05b4c23afed03d59829fba57e10c",
+      "name": "Волянюк Наталія Юріївна"
+    },
+    "room": null,
+    "subjectShort": null,
+    "subject": "ПК (зал) (залік)",
+    "group": "ІІ-51",
+    "groupId": 5814,
+    "type": "Assessment"
+  }
+]
