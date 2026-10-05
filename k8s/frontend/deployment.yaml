@@ -26,7 +26,7 @@ spec:
       containers:
         - name: frontend
           # CD rewrites this tag on every green build, placeholder only exists before the first run.
-          image: ghcr.io/chivta/kpischedule/frontend:5fdb6501d18b8edf2ffa15238ce325511831d6ee
+          image: ghcr.io/chivta/kpischedule/frontend:2a00aa5cc097e8dae86c1c0ebfe4d2b4a082d399
           ports:
             - name: http
               containerPort: 8080
