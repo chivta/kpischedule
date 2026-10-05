@@ -11,6 +11,8 @@ const TINY_PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
   'base64',
 )
+// The narrowest phone width still in common use.
+const NARROW_PHONE = { width: 320, height: 640 }
 // Longer than the overlay's own display time.
 const OVERLAY_LIFETIME_MS = 2500
 
@@ -61,12 +63,19 @@ test.describe('key sequence overlay', () => {
   })
 })
 
-test('feedback links open the Telegram account in a new tab', async ({ page }) => {
+test('the footer feedback link opens the Telegram account in a new tab', async ({ page }) => {
   await page.goto(PATHS.home)
-  const links = page.getByRole('link', { name: uk['feedback.open'] })
-  await expect(links).toHaveCount(2)
-  for (const link of await links.all()) {
-    await expect(link).toHaveAttribute('href', FEEDBACK_URL)
-    await expect(link).toHaveAttribute('target', '_blank')
+  const link = page.getByRole('contentinfo').getByRole('link', { name: uk['feedback.open'] })
+  await expect(link).toHaveAttribute('href', FEEDBACK_URL)
+  await expect(link).toHaveAttribute('target', '_blank')
+})
+
+test('the top bar fits narrow phones without horizontal overflow', async ({ page }) => {
+  await page.setViewportSize(NARROW_PHONE)
+  for (const path of [PATHS.home, PATHS.group]) {
+    await page.goto(path)
+    const bar = await page.getByRole('banner').boundingBox()
+    expect(bar && bar.x + bar.width).toBeLessThanOrEqual(NARROW_PHONE.width)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(NARROW_PHONE.width)
   }
 })

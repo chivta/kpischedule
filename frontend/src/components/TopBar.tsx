@@ -1,13 +1,13 @@
-import { MessageCircle, Monitor, Moon, Search, Sun } from 'lucide-react'
+import { Monitor, Moon, Search, Sun } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 import { useIsCompact } from '../hooks/useMediaQuery'
 import { useT } from '../i18n/useT'
-import { FEEDBACK_URL, HOME_PATH } from '../lib/routes'
+import { HOME_PATH } from '../lib/routes'
 import { localeStore, themeStore, useStore, type Locale, type ThemeChoice } from '../lib/storage'
 import { searchOpenStore } from '../lib/ui-state'
 import { color, fontSize, glass, radius, space, zIndex } from '../theme'
 import { Logo } from './Logo'
-import { IconButton, IconLink } from './ui/Button'
+import { IconButton } from './ui/Button'
 import { Kbd } from './ui/Kbd'
 
 const ICON_SIZE = 18
@@ -73,9 +73,6 @@ export function TopBar() {
           </button>
         )}
       </div>
-      <IconLink label={t('feedback.open')} href={FEEDBACK_URL} data-testid="feedback-link">
-        <MessageCircle size={ICON_SIZE} aria-hidden />
-      </IconLink>
       <IconButton
         label={t('locale.toggle')}
         onClick={() => localeStore.set(NEXT_LOCALE[locale])}
